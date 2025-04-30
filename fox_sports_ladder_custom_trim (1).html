@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fox Sports AFL Ladder (Custom Trimmed)</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            box-sizing: border-box;
+            padding: 0;
+        }
+        
+        .iframe-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .iframe-wrapper iframe {
+            position: absolute;
+            top: -400px; /* Hide 350px from top */
+            left: -500px; /* Hide 200px from left */
+            width: calc(100% - 800px); /* Add 200px to both left and right (200+200=400) */
+            height: calc(100% - 1550px); /* Add 350px to top and 200px to bottom (350+200=550) */
+            border: none;
+        }
+        
+        .overlay {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="iframe-wrapper">
+            <iframe 
+                src="https://www.foxsports.com.au/afl/ladder" 
+                title="Fox Sports AFL Ladder"
+                sandbox="allow-scripts allow-same-origin"
+                loading="lazy">
+            </iframe>
+        </div>
+        <div class="overlay">Content from Fox Sports</div>
+    </div>
+    
+    <script>
+        // Script to ensure the iframe stays properly positioned
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.querySelector('iframe');
+            const container = document.querySelector('.container');
+            
+            // Function to adjust iframe size based on container size
+            function adjustIframeSize() {
+                // Update these calculations if needed for better fit
+                const containerWidth = container.offsetWidth;
+                const containerHeight = container.offsetHeight;
+                
+                // Ensure iframe is large enough to cover the container plus the trim areas
+                iframe.style.width = (containerWidth + 400) + 'px';
+                iframe.style.height = (containerHeight + 550) + 'px';
+            }
+            
+            // Adjust iframe size initially and on window resize
+            window.addEventListener('resize', adjustIframeSize);
+            adjustIframeSize();
+            
+            // Handle iframe loading errors
+            iframe.addEventListener('error', function() {
+                console.error('Error loading iframe content.');
+            });
+        });
+    </script>
+</body>
+</html>
