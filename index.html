@@ -9,34 +9,35 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow-y: hidden;
+            overflow: hidden; /* No scrolling on body */
             font-family: Arial, sans-serif;
         }
-        
+
         .container {
             position: relative;
             width: 100%;
-            height: 100vh;
+            height: 1000px; /* Limit view to 1000px */
             overflow: hidden;
             box-sizing: border-box;
             padding: 0;
         }
-        
+
         .iframe-wrapper {
             position: relative;
             width: 100%;
             height: 100%;
             overflow: hidden;
         }
-        
+
         .iframe-wrapper iframe {
             position: absolute;
-            top: -400px; /* Hide 400px from top */
-            width: calc(100% + 400px); /* Add 200px to both left and right (200+200=400) */
-            height: calc(100% + 550px); /* Add 350px to top and 200px to bottom (350+200=550) */
+            top: -400px; /* Still cropping 400px from the top */
+            left: -200px; /* Add this to crop from the left */
+            width: calc(100% + 400px);
+            height: calc(100% + 550px);
             border: none;
         }
-        
+
         .overlay {
             position: absolute;
             bottom: 10px;
@@ -64,31 +65,24 @@
     </div>
 
     <script>
-        // Script to ensure the iframe stays properly positioned
         document.addEventListener('DOMContentLoaded', function() {
             const iframe = document.querySelector('iframe');
             const container = document.querySelector('.container');
-            
-            // Function to adjust iframe size based on container size
+
             function adjustIframeSize() {
-                // Update these calculations if needed for better fit
                 const containerWidth = container.offsetWidth;
                 const containerHeight = container.offsetHeight;
-                
-                // Ensure iframe is large enough to cover the container plus the trim areas
                 iframe.style.width = (containerWidth + 400) + 'px';
                 iframe.style.height = (containerHeight + 550) + 'px';
             }
-            
-            // Adjust iframe size initially and on window resize
+
             window.addEventListener('resize', adjustIframeSize);
             adjustIframeSize();
-            
-            // Handle iframe loading errors
+
             iframe.addEventListener('error', function() {
                 console.error('Error loading iframe content.');
             });
         });
     </script>
-    </body>
+</body>
 </html>
