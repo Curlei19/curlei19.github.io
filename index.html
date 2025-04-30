@@ -1,88 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fox Sports AFL Ladder (Custom Trimmed)</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden; /* No scrolling on body */
-            font-family: Arial, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fox Sports AFL Ladder (Trimmed & Locked)</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* No scroll on the whole doc */
+    }
 
-        .container {
-            position: relative;
-            width: 100%;
-            height: 1000px; /* Limit view to 1000px */
-            overflow: hidden;
-            box-sizing: border-box;
-            padding: 0;
-        }
+    .mask-container {
+      width: 100%;
+      height: 1000px; /* This is your visible window */
+      overflow: hidden; /* Hide anything below this */
+      position: relative;
+    }
 
-        .iframe-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+    iframe {
+      position: absolute;
+      top: -400px; /* crop from top */
+      left: -200px; /* crop from left */
+      width: calc(100% + 400px); /* stretch to cover */
+      height: 2000px; /* overly tall so content is fully there */
+      border: none;
+      pointer-events: none; /* optional: disables interaction */
+    }
 
-        .iframe-wrapper iframe {
-            position: absolute;
-            top: -400px; /* Still cropping 400px from the top */
-            left: -200px; /* Add this to crop from the left */
-            width: calc(100% + 400px);
-            height: calc(100% + 550px);
-            border: none;
-        }
-
-        .overlay {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background-color: rgba(0,0,0,0.6);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 12px;
-            z-index: 100;
-        }
-    </style>
+    .overlay {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 3px;
+      z-index: 2;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="iframe-wrapper">
-            <iframe 
-                src="https://www.foxsports.com.au/afl/ladder" 
-                title="Fox Sports AFL Ladder"
-                sandbox="allow-scripts allow-same-origin"
-                loading="lazy">
-            </iframe>
-        </div>
-        <div class="overlay">Content from Fox Sports</div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const iframe = document.querySelector('iframe');
-            const container = document.querySelector('.container');
-
-            function adjustIframeSize() {
-                const containerWidth = container.offsetWidth;
-                const containerHeight = container.offsetHeight;
-                iframe.style.width = (containerWidth + 400) + 'px';
-                iframe.style.height = (containerHeight + 550) + 'px';
-            }
-
-            window.addEventListener('resize', adjustIframeSize);
-            adjustIframeSize();
-
-            iframe.addEventListener('error', function() {
-                console.error('Error loading iframe content.');
-            });
-        });
-    </script>
+  <div class="mask-container">
+    <iframe src="https://www.foxsports.com.au/afl/ladder" 
+            title="Fox Sports AFL Ladder" 
+            sandbox="allow-scripts allow-same-origin"
+            loading="lazy">
+    </iframe>
+    <div class="overlay">Content from Fox Sports</div>
+  </div>
 </body>
 </html>
