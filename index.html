@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fox Sports AFL Ladder (Trimmed & Locked)</title>
+  <title>Fox Sports AFL Ladder (Trimmed & Cleaned)</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden; /* No scroll on the whole doc */
+      font-family: Arial, sans-serif;
     }
 
     .mask-container {
@@ -21,29 +22,99 @@
     iframe {
       position: absolute;
       top: -510px; /* crop from top */
+      width: 100%;
       height: 2000px; /* overly tall so content is fully there */
       border: none;
     }
 
-    .overlay {
+    /* This attempts to hide betting elements, but may not work due to cross-origin restrictions */
+    iframe::after {
+      content: "";
       position: absolute;
-      bottom: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      padding: 5px 10px;
-      font-size: 12px;
-      border-radius: 3px;
-      z-index: 2;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+    }
+    
+    .overlay-message {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #f8f8f8;
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+      z-index: 5;
+    }
+    
+    /* Custom AFL ladder as fallback */
+    .afl-ladder {
+      display: none; /* Hidden by default, can be shown if iframe approach doesn't work */
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .afl-ladder th, .afl-ladder td {
+      padding: 8px 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .afl-ladder th {
+      background-color: #002544;
+      color: white;
+    }
+    
+    .afl-ladder tr:nth-child(even) {
+      background-color: #f2f2f2;
     }
   </style>
 </head>
 <body>
+  <div class="overlay-message">
+    AFL Ladder 2025 - Updated automatically
+  </div>
+
   <div class="mask-container">
-    <iframe src="https://www.foxsports.com.au/afl/ladder" 
-            title="Fox Sports AFL Ladder" 
-            sandbox="allow-scripts allow-same-origin"
-            loading="lazy">
+    <iframe 
+      src="https://www.foxsports.com.au/afl/ladder" 
+      title="Fox Sports AFL Ladder" 
+      sandbox="allow-scripts allow-same-origin"
+      loading="lazy">
     </iframe>
+  </div>
+
+  <script>
+    // Script to attempt hiding betting elements
+    // Note: This likely won't work due to cross-origin restrictions
+    document.addEventListener('DOMContentLoaded', function() {
+      const iframe = document.querySelector('iframe');
+      
+      iframe.onload = function() {
+        try {
+          // This will likely fail due to cross-origin policy
+          const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+          
+          // Try to find and remove betting elements
+          const bettingLinks = iframeDocument.querySelectorAll('a[href*="pointsbet.com"]');
+          bettingLinks.forEach(link => {
+            link.style.display = 'none';
+          });
+          
+          // Also try to find them by their class
+          const bettingCells = iframeDocument.querySelectorAll('.styles__ButtonCell-bxy8qt-1');
+          bettingCells.forEach(cell => {
+            cell.style.display = 'none';
+          });
+        } catch (e) {
+          console.log('Unable to modify iframe content due to cross-origin restrictions');
+        }
+      };
+    });
+  </script>
 </body>
 </html>
